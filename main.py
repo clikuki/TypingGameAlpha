@@ -3,8 +3,14 @@ import subprocess
 from time import sleep
 
 def clear_screen():
-    # os.system("clear")
-    subprocess.run("clear", shell=True)
+    os.system("clear")
+    # subprocess.run("clear", shell=True)
+
+def start_game():
+    print("start game")
+
+def view_leaderboard():
+    print("view leaderboard")
 
 def get_logo_strings():
     if os.get_terminal_size()[0] <= 70:
@@ -109,13 +115,11 @@ def enter_menu():
 
         match choice:
             case "1":
-                print("start game")
-                return
+                return start_game
             case "2":
-                print("view leaderboard")
-                return
+                return view_leaderboard
             case "0":
-                print("\nGame closed, have a nice day.")
+                clear_screen()
                 return
             case _:
                 pass
