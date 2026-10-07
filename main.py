@@ -6,9 +6,9 @@ def clear_screen():
     # os.system("clear")
     subprocess.run("clear", shell=True)
 
-def print_startup():
+def get_logo_strings():
     if os.get_terminal_size()[0] <= 70:
-        startup_strings = (
+        return (
             r"╓─────────────────────────────────────────────────────────────╖",
             r"║                                                             ║",
             r"║      /████████                  /██                         ║",
@@ -46,7 +46,7 @@ def print_startup():
             r"╙─────────────────────────────────────────────────────────────╜",
         )
     else:
-        startup_strings = (
+        return (
             r"╓──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╖",
             r"║                                                                                                                                                  ║",
             r"║  /████████                  /██                        /██████  /██           /██                    /██████                                     ║",
@@ -63,6 +63,9 @@ def print_startup():
             r"║                                                                                                                                                  ║",
             r"╙──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╜",
         )
+
+def print_logo_startup():
+    startup_strings = get_logo_strings()
 
     size = 0
     for row in startup_strings:
@@ -85,9 +88,48 @@ def print_startup():
         print(curr_str)
         sleep(0.01)
 
-def main():
-    print_startup()
+    sleep(0.5)
 
-    pass
+def print_logo_normal():
+    startup_strings = get_logo_strings()
+    print("\n".join(startup_strings) + "\n")
+
+def print_menu():
+    print("[1] -----------   Start Game     ----------")
+    sleep(0.02)
+    print("[2] ----------- View Leaderboard ----------")
+    sleep(0.02)
+    print("[0] -----------      Exit        ----------")
+    sleep(0.02)
+
+def enter_menu():
+    while True:
+        print_menu()
+        choice = input("\nWhat would you like to do? ")
+
+        match choice:
+            case "1":
+                print("start game")
+                return
+            case "2":
+                print("view leaderboard")
+                return
+            case "0":
+                print("\nGame closed, have a nice day.")
+                return
+            case _:
+                pass
+
+        # Invalid option, redraw screen
+        clear_screen()
+        print_logo_normal()
+                
+
+def main():
+    print_logo_startup()
+
+    page = enter_menu
+    while page != None:
+        page = page()
 
 main()
