@@ -1,16 +1,10 @@
 import os
-import subprocess
+#import subprocess
 from time import sleep
 
 def clear_screen():
     os.system("clear")
     # subprocess.run("clear", shell=True)
-
-def start_game():
-    print("start game")
-
-def view_leaderboard():
-    print("view leaderboard")
 
 def get_logo_strings():
     if os.get_terminal_size()[0] <= 70:
@@ -28,6 +22,14 @@ def get_logo_strings():
             r"║             /██  | ██| ██                     /██  \ ██     ║",
             r"║            |  ██████/| ██                    |  ██████/     ║",
             r"║             \______/ |__/                     \______/      ║",
+            r"║       /██████                                               ║",
+            r"║      /██__  ██                                              ║",
+            r"║     | ██  \__/  /██████  /██████/████   /██████             ║",
+            r"║     | ██ /████ |____  ██| ██_  ██_  ██ /██__  ██            ║",
+            r"║     | ██|_  ██  /███████| ██ \ ██ \ ██| ████████            ║",
+            r"║     | ██  \ ██ /██__  ██| ██ | ██ | ██| ██_____/            ║",
+            r"║     |  ██████/|  ███████| ██ | ██ | ██|  ███████            ║",
+            r"║      \______/  \_______/|__/ |__/ |__/ \_______/            ║",
             r"║                                                             ║",
             r"║       /██████  /██           /██                            ║",
             r"║      /██__  ██| ██          | ██                            ║",
@@ -40,15 +42,6 @@ def get_logo_strings():
             r"║                   | ██                                      ║",
             r"║                   | ██                                      ║",
             r"║                   |__/                                      ║",
-            r"║       /██████                                               ║",
-            r"║      /██__  ██                                              ║",
-            r"║     | ██  \__/  /██████  /██████/████   /██████             ║",
-            r"║     | ██ /████ |____  ██| ██_  ██_  ██ /██__  ██            ║",
-            r"║     | ██|_  ██  /███████| ██ \ ██ \ ██| ████████            ║",
-            r"║     | ██  \ ██ /██__  ██| ██ | ██ | ██| ██_____/            ║",
-            r"║     |  ██████/|  ███████| ██ | ██ | ██|  ███████            ║",
-            r"║      \______/  \_______/|__/ |__/ |__/ \_______/            ║",
-            r"║                                                             ║",
             r"╙─────────────────────────────────────────────────────────────╜",
         )
     else:
@@ -100,34 +93,43 @@ def print_logo_normal():
     startup_strings = get_logo_strings()
     print("\n".join(startup_strings) + "\n")
 
-def print_menu():
-    print("[1] -----------   Start Game     ----------")
-    sleep(0.02)
-    print("[2] ----------- View Leaderboard ----------")
-    sleep(0.02)
-    print("[0] -----------      Exit        ----------")
-    sleep(0.02)
+def print_menu(do_slow):
+    print("[1] -----------     Start Game     ----------")
+    if do_slow: sleep(0.02)
+    print("[2] -----------  View Leaderboard  ----------")
+    if do_slow: sleep(0.02)
+    print("[0] -----------        Exit        ----------")
+    if do_slow: sleep(0.02)
 
 def enter_menu():
+    last_input = None
     while True:
-        print_menu()
-        choice = input("\nWhat would you like to do? ")
+        print_menu(last_input == None)
+        
+        if last_input != None:
+                print("\nInvalid option \"", last_input, "\".")
+        else:
+                print("")
+        choice = input("What would you like to do? ")
 
-        match choice:
-            case "1":
+        if choice == "1":
                 return start_game
-            case "2":
+        if choice == "2":
                 return view_leaderboard
-            case "0":
+        if choice == "0":
                 clear_screen()
                 return
-            case _:
-                pass
 
         # Invalid option, redraw screen
+        last_input = choice
         clear_screen()
         print_logo_normal()
-                
+
+def start_game():
+    print("start game")
+
+def view_leaderboard():
+    print("view leaderboard")
 
 def main():
     print_logo_startup()
