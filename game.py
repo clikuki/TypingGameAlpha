@@ -1,7 +1,14 @@
 import time
-from utils import clear_screen, print_separator
+from utils import clear_screen
 import leaderboard
 import menu
+
+def _get_score(word):
+    length = len(word)
+    if length == 3: return 2
+    if length == 4: return 5
+    if length == 5: return 7
+    return 0
 
 def _run_game():
     # TODO: replace word list with randomized grab from word bank
@@ -10,34 +17,55 @@ def _run_game():
     start_time = time.time()
     
     score = 0
-    scoring = (0,0,0,2,5,7)
     incorrects = []
     for word in word_list:
         clear_screen()
-        print_separator()
         print("Your word is \"" + str(word) + "\"\n")
         typed_word = input("Typing: ").upper()
         
         if typed_word == word:
-            score += scoring[len(word)]
+            score += _get_score(word)
         else:
             incorrects.append((word, typed_word))
 
+    clear_screen()
+    
     duration = round(time.time() - start_time, 2)
 
     return (score, duration, incorrects)
 
-def _handle_results(score, duration, incorrects):
-    print_separator()
-    print("You got a score of " + str(score) + ", and took " + str(duration) + "s.")
+def _print_count_up(goal, pretext, posttext, round_by, padding, fill_char):
+    for t in range(101):
+        t /= 100
+        i = (1-t) ** 0.5 - 1 # ease-in
+        progress = i * i
+        value = round(goal * progress, round_by)
+        print("\r" + pretext + str(value).ljust(padding, fill_char) + posttext, end="", flush=True)
+        time.sleep(0.01)
+    time.sleep(0.4)
+    print("")
 
-    print("\nIncorrect words:\n")
-    for word, typed_word in incorrects:
-        print(word, "->", typed_word or "<EMPTY>")
+def _handle_results(score, duration, incorrects):
+    _print_count_up(score   , "You got a score of ", " points.", None, 2, " ")
+    _print_count_up(duration, "You took "          , " s."     , 2   , 5, "0")
+
+    mistakes = len(incorrects)
+    if mistakes == 0:
+        print("You made no mistakes.")
+    else:
+        _print_count_up(mistakes, "You made ", " mistakes.", None, 2, " ")
+
+        print("\n" + "─" * 24)
+        print("  ACTUAL       RECIEVED ")
+        time.sleep(0.01)
+        print("─" * 24)
+        for word, typed_word in incorrects:
+            time.sleep(0.01)
+            print(word.center(10), "->", (typed_word or "<EMPTY>").center(10))
+        print("─" * 24)
 
 def start():
     clear_screen()
-    print_separator()
     print(
         "\nInstructions:"
         "\n You will be presented with 7 3-letter words, 7 4-letter words, and 7 5-letter words, in random order."
@@ -45,9 +73,16 @@ def start():
     )
     
     # Return to menu if canceled
-    choice = input("\nStart? (Y/n) ")
+    choice = input("\nStart game? (Y/n) ")
     if choice.upper() == "N":
         return menu.enter
+
+    third = 1/3
+    for i in range(3):
+        for j in range(1, 4):
+            clear_screen()
+            print("Starting in", 3-i, ("."*j).ljust(3), " ")
+            time.sleep(third)
 
     score, duration, incorrects = _run_game()
     _handle_results(score, duration, incorrects)
