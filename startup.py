@@ -2,7 +2,7 @@ import os
 from time import sleep
 from utils import clear_screen
 
-def get_logo_strings():
+def _get_logo_strings():
     win_size = os.get_terminal_size()[0]
     if win_size <= 101:
         return (
@@ -88,7 +88,7 @@ def get_logo_strings():
         )
 
 def print_animation():
-    startup_strings = get_logo_strings()
+    startup_strings = _get_logo_strings()
 
     size = 0
     for row in startup_strings:
@@ -114,5 +114,5 @@ def print_animation():
     sleep(0.5)
 
 def print_fast():
-    startup_strings = get_logo_strings()
+    startup_strings = _get_logo_strings()
     print("\n".join(startup_strings) + "\n")
