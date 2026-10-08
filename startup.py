@@ -115,4 +115,5 @@ def print_animation():
 
 def print_fast():
     startup_strings = _get_logo_strings()
+    clear_screen()
     print("\n".join(startup_strings) + "\n")
