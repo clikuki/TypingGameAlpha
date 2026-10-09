@@ -21,6 +21,9 @@ def _load_leaderboard_data():
     return data
 
 def _save_leaderboard_data(data):
+    if len(data) > 10:
+        data = data[:10]
+
     with open(_LEADERBOARD_PATH, "w") as fh:
         for entry in data:
             g_name = entry["name"]
@@ -87,9 +90,13 @@ def try_add_new_entry(score, time):
         g_time = float(entry["time"])
 
         # If scores tie, prioritize shorter time
+        # If time still ties, then first one wins
         if score == g_score and time >= g_time:
             continue
-        if score > g_score:
+        if score >= g_score:
+            if i >= 10: # ranking index is too low
+                return
+
             data.insert(i, {
                 "name": _get_name(),
                 "time": str(time),
