@@ -84,7 +84,12 @@ def try_add_new_entry(score, time):
 
     for i,entry in enumerate(data):
         g_score = int(entry["score"])
-        if score >= g_score:
+        g_time = float(entry["time"])
+
+        # If scores tie, prioritize shorter time
+        if score == g_score and time >= g_time:
+            continue
+        if score > g_score:
             data.insert(i, {
                 "name": _get_name(),
                 "time": str(time),
