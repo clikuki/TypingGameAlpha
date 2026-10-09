@@ -45,7 +45,7 @@ def _print_count_up(goal, pretext, posttext, round_by, padding, fill_char):
     time.sleep(0.4)
     print("")
 
-def _handle_results(score, duration, incorrects):
+def _display_results(score, duration, incorrects):
     _print_count_up(score   , "You got a score of ", " points.", None, 2, " ")
     _print_count_up(duration, "You took "          , " s."     , 2   , 5, "0")
 
@@ -85,7 +85,8 @@ def start():
             time.sleep(third)
 
     score, duration, incorrects = _run_game()
-    _handle_results(score, duration, incorrects)
+    _display_results(score, duration, incorrects)
 
     input("\nPress ENTER to continue to leaderboard.") # block until user enters
+    leaderboard.try_add_new_entry(score, duration)
     return leaderboard.view

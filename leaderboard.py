@@ -1,5 +1,6 @@
 import os
 from utils import clear_screen
+import menu
 
 _LEADERBOARD_PATH = "leaderboard.dat"
 
@@ -18,6 +19,20 @@ def _load_leaderboard_data():
             })
 
     return data
+
+def _save_leaderboard_data(data):
+    with open(_LEADERBOARD_PATH, "w") as fh:
+        for entry in data:
+            g_name = entry["name"]
+            g_time = entry["time"]
+            g_score = entry["score"]
+
+            fh.write(g_name)
+            fh.write(",")
+            fh.write(g_time)
+            fh.write(",")
+            fh.write(g_score)
+            fh.write("\n")
 
 def _print_leader_board(data):
     print(" " + " LEADERBOARD ".center(45, "─") + " ")
@@ -42,6 +57,50 @@ def _print_leader_board(data):
 
     print("╙─────────────────────────────────────────────╜")
 
+def _get_name():
+    err = ""
+    while True:
+        clear_screen()
+        print("New entry on the leaderboard!")
+
+        if err:
+            print(err)
+
+        name = input("\nEnter your initials: ")
+        n_len = len(name)
+
+        if n_len < 1:
+            err = "Name must be at least 1 character long."
+            continue
+        if n_len > 6:
+            err = "Name must be at less than 8 characters long."
+            continue
+
+        clear_screen()
+        return name.upper()
+
+def try_add_new_entry(score, time):
+    data = _load_leaderboard_data()
+
+    for i,entry in enumerate(data):
+        g_score = int(entry["score"])
+        if score >= g_score:
+            data.insert(i, {
+                "name": _get_name(),
+                "time": str(time),
+                "score": str(score),
+            })
+            break
+    else:
+        if len(data) < 10:
+            data.append({
+                "name": _get_name(),
+                "time": str(time),
+                "score": str(score),
+            })
+
+    _save_leaderboard_data(data)
+
 def view():
     clear_screen()
 
@@ -49,3 +108,4 @@ def view():
     _print_leader_board(data)
 
     input("\nPress ENTER to continue.")
+    return menu.enter

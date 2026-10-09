@@ -18,6 +18,8 @@ def _print_menu(do_slow):
 def enter():
     last_input = None
     while True:
+        clear_screen()
+        startup.print_fast()
         _print_menu(last_input == None)
         
         if last_input != None:
@@ -35,5 +37,3 @@ def enter():
 
         # Invalid option, redraw screen
         last_input = choice
-        clear_screen()
-        startup.print_fast()
