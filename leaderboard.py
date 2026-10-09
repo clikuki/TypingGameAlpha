@@ -37,7 +37,7 @@ def _save_leaderboard_data(data):
 def _print_leader_board(data):
     print(" " + " LEADERBOARD ".center(45, "─") + " ")
     print("╓─────────────────────────────────────────────╖")
-    print("║ RANK    NAME         TIME             SCORE ║")
+    print("║ RANK    NAME          TIME            SCORE ║")
     print("╟─────────────────────────────────────────────╢")
 
     if data:
@@ -47,8 +47,8 @@ def _print_leader_board(data):
             g_score = entry["score"]
             
             row = ("[" + str(i+1) + "]").rjust(4) + " "
-            row += "   " + g_name.ljust(5).ljust(12, "─")
-            row += (" "+str(g_time).rjust(5)+" ").ljust(19, "─")
+            row += "   " + (g_name + " ").ljust(12, "─")
+            row += (" "+str(g_time).rjust(5)+"  ").ljust(19, "─")
             row += str(g_score).rjust(3) + " "
             print("║ " + row + " ║")
     else:
@@ -72,8 +72,8 @@ def _get_name():
         if n_len < 1:
             err = "Name must be at least 1 character long."
             continue
-        if n_len > 6:
-            err = "Name must be at less than 8 characters long."
+        if n_len > 8:
+            err = "Name must be at most 8 characters long."
             continue
 
         clear_screen()
