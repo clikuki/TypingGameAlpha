@@ -1,3 +1,4 @@
+import os
 from time import sleep
 from utils import clear_screen
 import game
@@ -5,11 +6,13 @@ import leaderboard
 import startup
 
 def _print_menu(do_slow):
-    print("[1] -----------     Start Game     ----------")
+    win_x,_ = os.get_terminal_size()
+    win_x = min(win_x, 90)
+    print("[1] " + "  Start Game  ".center(win_x, "-"))
     if do_slow: sleep(0.02)
-    print("[2] -----------  View Leaderboard  ----------")
+    print("[2] " + "  View Leaderboard  ".center(win_x, "-"))
     if do_slow: sleep(0.02)
-    print("[0] -----------        Exit        ----------")
+    print("[0] " + "  Exit  ".center(win_x, "-"))
     if do_slow: sleep(0.02)
 
 def enter():
