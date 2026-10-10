@@ -1,6 +1,6 @@
 import os
 import time
-from utils import clear_screen, flush_terminal
+from utils import stringify_float_with_zeros, clear_screen, flush_terminal
 
 
 def _load_leaderboard_data():
@@ -94,10 +94,7 @@ def _print_leader_board(data):
             g_name = entry["name"]
             g_score = entry["score"]
 
-            g_time = float(entry["time"])
-            g_time = str(round(g_time, 2)).split(".")
-            g_time[1] = g_time[1].ljust(2, "0")
-            g_time = ".".join(g_time).rjust(6)
+            g_time = stringify_float_with_zeros(float(entry["time"]), 2).rjust(6)
             
             row = ("[" + str(i+1) + "]").rjust(4) + " "
             new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))

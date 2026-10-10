@@ -1,5 +1,5 @@
 import time
-from utils import clear_screen, flush_terminal
+from utils import stringify_float_with_zeros, clear_screen, flush_terminal
 from words import get_random_words
 import leaderboard
 
@@ -32,26 +32,32 @@ def _run_game(word_set):
 
     return (score, duration, incorrects)
 
-def _print_count_up(goal, pretext, posttext, round_by, padding, fill_char):
+def _print_count_up(goal, pretext, posttext, round_by):
     for t in range(101):
         t /= 100
         i = (1-t) ** 0.5 - 1 # ease-in
         progress = i * i
         value = round(goal * progress, round_by)
-        print("\r" + pretext + str(value).ljust(padding, fill_char) + posttext, end="", flush=True)
+
+        if type(value) is float:
+            value = stringify_float_with_zeros(value, 2)
+        else:
+            value = str(value)
+
+        print("\r" + pretext + value + posttext, end="", flush=True)
         time.sleep(0.01)
     time.sleep(0.4)
     print("")
 
 def _display_results(score, duration, incorrects):
-    _print_count_up(score   , "You got a score of ", " points.", None, 2, " ")
-    _print_count_up(duration, "You took "          , " s."     , 2   , 5, "0")
+    _print_count_up(score   , "You got a score of ", " points.", None)
+    _print_count_up(duration, "You took "          , " s."     , 2   )
 
     mistakes = len(incorrects)
     if mistakes == 0:
         print("You made no mistakes.")
     else:
-        _print_count_up(mistakes, "You made ", " mistakes.", None, 2, " ")
+        _print_count_up(mistakes, "You made ", " mistakes.", None)
 
         print("\n" + "═" * 24)
         print("ACTUAL".center(12) + "RECIEVED".center(12))

@@ -2,6 +2,11 @@ import os
 import sys
 import termios
 
+def stringify_float_with_zeros(f, n):
+    f = str(round(f, n)).split(".")
+    f[1] = f[1].ljust(n, "0")
+    return ".".join(f)
+
 def clear_screen():
     os.system("clear")
     # subprocess.run("clear", shell=True)
