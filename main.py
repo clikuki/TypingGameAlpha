@@ -27,7 +27,7 @@ def _open_menu():
         _print_menu(last_input == None)
         
         if last_input != None:
-            print("\nInvalid option \"", last_input, "\".")
+            print("\nInvalid option \"" + str(last_input) + "\".")
             last_input = None
         else:
             print("")
