@@ -13,5 +13,4 @@ def flush_terminal():
     # Uses termios, which is on python stdlibs on linux.
     # sys.stdin.flush() doesnt work for cause its printing only ig.
     # Please dont smite me for using termios sir
-    sys.stdout.flush()
     termios.tcflush(sys.stdin, termios.TCIOFLUSH)

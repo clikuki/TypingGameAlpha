@@ -1,5 +1,6 @@
 import time
 from utils import clear_screen, flush_terminal
+from words import get_random_words
 import leaderboard
 import menu
 
@@ -11,18 +12,16 @@ def _get_score(word):
     return 0
 
 def _run_game():
-    # TODO: replace word list with randomized grab from word bank
-    word_list = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN"]
-
+    word_list = get_random_words()
     start_time = time.time()
-    
     score = 0
     incorrects = []
+
     for word in word_list:
         clear_screen()
         print("Your word is \"" + str(word) + "\"\n")
         typed_word = input("Typing: ").upper()
-        
+
         if typed_word == word:
             score += _get_score(word)
         else:
@@ -30,7 +29,7 @@ def _run_game():
 
     clear_screen()
     
-    duration = round(time.time() - start_time, 2)
+    duration = time.time() - start_time
 
     return (score, duration, incorrects)
 
@@ -55,14 +54,15 @@ def _display_results(score, duration, incorrects):
     else:
         _print_count_up(mistakes, "You made ", " mistakes.", None, 2, " ")
 
-        print("\n" + "─" * 24)
-        print("  ACTUAL       RECIEVED ")
-        time.sleep(0.01)
+        print("\n" + "═" * 24)
+        print("ACTUAL".center(12) + "RECIEVED".center(12))
         print("─" * 24)
         for word, typed_word in incorrects:
             time.sleep(0.01)
             print(word.center(10), "->", (typed_word or "<EMPTY>").center(10))
-        print("─" * 24)
+        print("═" * 24)
+
+    time.sleep(0.6)
 
 def start():
     clear_screen()
@@ -90,7 +90,6 @@ def start():
     _display_results(score, duration, incorrects)
 
     flush_terminal()
-    
     input("\nPress ENTER to continue to leaderboard.") # block until user enters
     leaderboard.try_add_new_entry(score, duration)
     return leaderboard.view

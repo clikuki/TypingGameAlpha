@@ -1,5 +1,5 @@
 import os
-from utils import clear_screen, flush_terminal
+from utils import clear_screen
 import menu
 
 _LEADERBOARD_PATH = "leaderboard.dat"
@@ -46,8 +46,9 @@ def _print_leader_board(data):
     if data:
         for i,entry in enumerate(data):
             g_name = entry["name"]
-            g_time = entry["time"]
             g_score = entry["score"]
+            g_time = float(entry["time"])
+            g_time = str(round(g_time, 2))
             
             row = ("[" + str(i+1) + "]").rjust(4) + " "
             row += "   " + (g_name + " ").ljust(12, "─")
@@ -119,6 +120,5 @@ def view():
     data = _load_leaderboard_data()
     _print_leader_board(data)
 
-    flush_terminal()
     input("\nPress ENTER to continue.")
     return menu.enter

@@ -1,4 +1,3 @@
-import os
 import sys
 from utils import clear_screen
 import startup
