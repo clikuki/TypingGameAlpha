@@ -23,17 +23,17 @@ def enter():
         _print_menu(last_input == None)
         
         if last_input != None:
-                print("\nInvalid option \"", last_input, "\".")
+            print("\nInvalid option \"", last_input, "\".")
         else:
-                print("")
+            print("")
         choice = input("What would you like to do? ")
 
         if choice == "1":
-                return game.start
+            return game.start
         if choice == "2":
-                return leaderboard.view
+            return leaderboard.view
         if choice == "0":
-                return
+            return
 
         # Invalid option, redraw screen
         last_input = choice
