@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-from utils import clear_screen
+from utils import clear_screen, flush_terminal
 import startup
 import game
 import leaderboard
@@ -31,7 +31,8 @@ def _open_menu():
             last_input = None
         else:
             print("")
-        
+
+        flush_terminal()
         choice = input("What would you like to do? ")
 
         if choice == "0":

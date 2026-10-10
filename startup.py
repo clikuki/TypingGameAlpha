@@ -104,9 +104,9 @@ def print_animation():
             row_slice_idx = i-j*2
 
             if row_slice_idx <= 0:
-                break
-            
-            curr_str += row[:row_slice_idx] + "\n"
+                curr_str += "\n"
+            else:
+                curr_str += row[:row_slice_idx] + "\n"
 
         print(curr_str)
         sleep(0.01)
