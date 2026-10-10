@@ -18,7 +18,7 @@ def _run_game(word_set):
 
     for word in word_list:
         clear_screen()
-        print("Your word is \"" + str(word) + "\"\n")
+        print("Your word is " + str(word))
         typed_word = input("Typing: ").upper()
 
         if typed_word == word:
