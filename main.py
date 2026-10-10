@@ -1,7 +1,51 @@
+import os
 import sys
+import time
 from utils import clear_screen
 import startup
-import menu
+import game
+import leaderboard
+import words
+
+def _print_menu(do_slow):
+    win_x,_ = os.get_terminal_size()
+    win_x = min(win_x, 90)
+    print("[1] " + "  Start Game  ".center(win_x, "-"))
+    if do_slow: time.sleep(0.02)
+    print("[2] " + "  View Leaderboard  ".center(win_x, "-"))
+    if do_slow: time.sleep(0.02)
+    print("[0] " + "  Exit  ".center(win_x, "-"))
+    if do_slow: time.sleep(0.02)
+
+def _open_menu():
+    word_set = words.parse_word_set()
+
+    last_input = None
+    while True:
+        clear_screen()
+        startup.print_fast()
+        _print_menu(last_input == None)
+        
+        if last_input != None:
+            print("\nInvalid option \"", last_input, "\".")
+            last_input = None
+        else:
+            print("")
+        
+        choice = input("What would you like to do? ")
+
+        if choice == "0":
+            return
+        if choice == "1":
+            if game.start(word_set):
+                leaderboard.view()
+            continue
+        if choice == "2":
+            leaderboard.view()
+            continue
+
+        # Invalid option, redraw screen
+        last_input = choice
 
 def main():
     args = sys.argv[1:]
@@ -10,13 +54,7 @@ def main():
     else:
         startup.print_animation()
 
-    # rudimentary page system
-    # each page function runs its own logic, then returns the next page function to switch pages
-    # returning no page clears the screen before closing the program
-    page = menu.enter
-    while page != None:
-        page = page()
-
+    _open_menu()
     clear_screen()
 
 main()

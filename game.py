@@ -2,7 +2,6 @@ import time
 from utils import clear_screen, flush_terminal
 from words import get_random_words
 import leaderboard
-import menu
 
 def _get_score(word):
     length = len(word)
@@ -11,8 +10,8 @@ def _get_score(word):
     if length == 5: return 7
     return 0
 
-def _run_game():
-    word_list = get_random_words()
+def _run_game(word_set):
+    word_list = get_random_words(word_set)
     start_time = time.time()
     score = 0
     incorrects = []
@@ -64,7 +63,7 @@ def _display_results(score, duration, incorrects):
 
     time.sleep(0.6)
 
-def start():
+def start(word_set):
     clear_screen()
     print(
         "\nInstructions:"
@@ -75,7 +74,7 @@ def start():
     # Return to menu if canceled
     choice = input("\nStart game? (Y/n) ")
     if choice.upper() == "N":
-        return menu.enter
+        return False
 
     third = 1/3
     for i in range(3):
@@ -86,10 +85,10 @@ def start():
 
     flush_terminal()
 
-    score, duration, incorrects = _run_game()
+    score, duration, incorrects = _run_game(word_set)
     _display_results(score, duration, incorrects)
 
     flush_terminal()
     input("\nPress ENTER to continue to leaderboard.") # block until user enters
     leaderboard.try_add_new_entry(score, duration)
-    return leaderboard.view
+    return True

@@ -9,17 +9,18 @@ def _parse_file(file_path):
 
     return words
 
-_words = {
-    3: _parse_file("./words/length-three.txt"),
-    4: _parse_file("./words/length-four.txt"),
-    5: _parse_file("./words/length-five.txt"),
-}
+def parse_word_set():
+    return {
+        3: _parse_file("./words/length-three.txt"),
+        4: _parse_file("./words/length-four.txt"),
+        5: _parse_file("./words/length-five.txt"),
+    }
 
-def get_random_words():
+def get_random_words(word_set):
     bag = []
 
     for i in range(3, 6):
-        popul = _words[i]
+        popul = word_set[i]
         bag += random.sample(popul, 7)
         # bag += popul[:7]
 

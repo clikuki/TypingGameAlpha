@@ -1,15 +1,14 @@
 import os
 from utils import clear_screen
-import menu
 
-_LEADERBOARD_PATH = "leaderboard.dat"
 
 def _load_leaderboard_data():
-    if not os.path.exists(_LEADERBOARD_PATH):
+    leaderboard_path = "leaderboard.dat"
+    if not os.path.exists(leaderboard_path):
         return []
 
     data = []
-    with open(_LEADERBOARD_PATH, "r") as fh:
+    with open(leaderboard_path, "r") as fh:
         for line in fh:
             line = line.strip().split(",")
             data.append({
@@ -21,10 +20,12 @@ def _load_leaderboard_data():
     return data
 
 def _save_leaderboard_data(data):
+    leaderboard_path = "leaderboard.dat"
+
     if len(data) > 10:
         data = data[:10]
 
-    with open(_LEADERBOARD_PATH, "w") as fh:
+    with open(leaderboard_path, "w") as fh:
         for entry in data:
             g_name = entry["name"]
             g_time = entry["time"]
@@ -121,4 +122,3 @@ def view():
     _print_leader_board(data)
 
     input("\nPress ENTER to continue.")
-    return menu.enter
