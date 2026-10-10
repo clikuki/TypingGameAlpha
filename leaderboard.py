@@ -1,5 +1,6 @@
 import os
-from utils import clear_screen
+import time
+from utils import clear_screen, flush_terminal
 
 
 def _load_leaderboard_data():
@@ -38,11 +39,55 @@ def _save_leaderboard_data(data):
             fh.write(g_score)
             fh.write("\n")
 
+def _row_update_print(row_strings, transformations, replace):
+    for t in transformations:
+        idx = t[0]
+        new_row = t[1]
+
+        if len(t) > 2:
+            sleep_dur = t[2]
+        else:
+            sleep_dur = 0.01
+        
+        clear_screen()
+        print("\n".join(row_strings))
+        if replace:
+            row_strings[idx] = new_row
+        else:
+            row_strings.insert(idx, new_row)
+
+        time.sleep(sleep_dur)
+    
+    clear_screen()
+    print("\n".join(row_strings))
+
 def _print_leader_board(data):
-    print(" " + " LEADERBOARD ".center(45, "─") + " ")
-    print("╓─────────────────────────────────────────────╖")
-    print("║ RANK    NAME          TIME            SCORE ║")
-    print("╟─────────────────────────────────────────────╢")
+    strings = [
+        " " + " LEADERBOARD ".center(45, "─") + " ",
+    ]
+
+    # first draw: empty box expanding downwards
+    new_rows = [
+        (1, "╓─────────────────────────────────────────────╖"),
+        (2, "╙─────────────────────────────────────────────╜"),
+        (2, "║                                             ║"),
+        (3, "╟─────────────────────────────────────────────╢"),
+    ]
+
+    row_cnt = len(data) or 2
+    for i in range(row_cnt):
+        new_rows.append((i+4, new_rows[2][1]))
+
+    _row_update_print(strings, new_rows, False)
+    time.sleep(0.3)
+
+    # second draw: line-by-line entries
+    new_rows = [
+        (2, "║ RANK                                        ║", 0.05),
+        (2, "║ RANK    NAME                                ║", 0.05),
+        (2, "║ RANK    NAME          TIME                  ║", 0.05),
+        (2, "║ RANK    NAME          TIME            SCORE ║", 0.05),
+    ]
 
     if data:
         for i,entry in enumerate(data):
@@ -52,15 +97,23 @@ def _print_leader_board(data):
             g_time = str(round(g_time, 2))
             
             row = ("[" + str(i+1) + "]").rjust(4) + " "
-            row += "   " + (g_name + " ").ljust(12, "─")
-            row += (" "+str(g_time).rjust(5)+"  ").ljust(19, "─")
-            row += str(g_score).rjust(3) + " "
-            print("║ " + row + " ║")
-    else:
-        print("║             No past games found.            ║")
-        print("║    Play a couple games to fill this out!    ║")
+            new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))
 
-    print("╙─────────────────────────────────────────────╜")
+            row += "   " + (g_name + " ").ljust(12)
+            new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))
+
+            row += (" "+str(g_time).rjust(5)+"  ").ljust(19)
+            new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))
+
+            row += str(g_score).rjust(3) + " "
+            new_rows.append((i+4, "║ " + row + " ║", 0.03))
+    else:
+        new_rows.extend([
+            (4, "║             No past games found.            ║"),
+            (5, "║    Play a couple games to fill this out!    ║"),
+        ])
+
+    _row_update_print(strings, new_rows, True)
 
 def _get_name():
     err = ""
@@ -121,4 +174,7 @@ def view():
     data = _load_leaderboard_data()
     _print_leader_board(data)
 
+    time.sleep(0.2)
+
+    flush_terminal()
     input("\nPress ENTER to continue.")
