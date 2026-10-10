@@ -93,8 +93,11 @@ def _print_leader_board(data):
         for i,entry in enumerate(data):
             g_name = entry["name"]
             g_score = entry["score"]
+
             g_time = float(entry["time"])
-            g_time = str(round(g_time, 2))
+            g_time = str(round(g_time, 2)).split(".")
+            g_time[1] = g_time[1].ljust(2, "0")
+            g_time = ".".join(g_time).rjust(6)
             
             row = ("[" + str(i+1) + "]").rjust(4) + " "
             new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))
@@ -102,7 +105,7 @@ def _print_leader_board(data):
             row += "   " + (g_name + " ").ljust(12)
             new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))
 
-            row += (" "+str(g_time).rjust(5)+"  ").ljust(19)
+            row += (" "+g_time+"  ").ljust(19)
             new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))
 
             row += str(g_score).rjust(3) + " "
