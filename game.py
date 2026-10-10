@@ -1,5 +1,5 @@
 import time
-from utils import clear_screen
+from utils import clear_screen, flush_terminal
 import leaderboard
 import menu
 
@@ -84,9 +84,13 @@ def start():
             print("Starting in", 3-i, ("."*j).ljust(3), " ")
             time.sleep(third)
 
+    flush_terminal()
+
     score, duration, incorrects = _run_game()
     _display_results(score, duration, incorrects)
 
+    flush_terminal()
+    
     input("\nPress ENTER to continue to leaderboard.") # block until user enters
     leaderboard.try_add_new_entry(score, duration)
     return leaderboard.view

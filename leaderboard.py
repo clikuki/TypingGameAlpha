@@ -1,5 +1,5 @@
 import os
-from utils import clear_screen
+from utils import clear_screen, flush_terminal
 import menu
 
 _LEADERBOARD_PATH = "leaderboard.dat"
@@ -119,5 +119,6 @@ def view():
     data = _load_leaderboard_data()
     _print_leader_board(data)
 
+    flush_terminal()
     input("\nPress ENTER to continue.")
     return menu.enter
