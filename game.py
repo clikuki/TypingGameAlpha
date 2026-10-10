@@ -1,5 +1,5 @@
 import time
-from utils import stringify_float_with_zeros, clear_screen, flush_terminal
+from utils import asciify, stringify_float_with_zeros, clear_screen, flush_terminal
 from words import get_random_words
 import leaderboard
 
@@ -10,6 +10,14 @@ def _get_score(word):
     if length == 5: return 7
     return 0
 
+def _print_from_ascii_rows(pretext, word):
+    ascii_rows = asciify(word)
+
+    print(pretext + ascii_rows[0])
+    pretext_len = len(pretext)
+    for row in ascii_rows[1:]:
+        print(" " * pretext_len + row)
+
 def _run_game(word_set):
     word_list = get_random_words(word_set)
     start_time = time.time()
@@ -18,7 +26,7 @@ def _run_game(word_set):
 
     for word in word_list:
         clear_screen()
-        print("Your word is " + str(word))
+        _print_from_ascii_rows("Your word is ", word)
         typed_word = input("Typing: ").upper()
 
         if typed_word == word:
