@@ -22,6 +22,7 @@ def _open_menu():
 
     last_input = None
     while True:
+        flush_terminal()
         clear_screen()
         startup.print_fast()
         _print_menu(last_input == None)
@@ -32,7 +33,6 @@ def _open_menu():
         else:
             print("")
 
-        flush_terminal()
         choice = input("What would you like to do? ")
 
         if choice == "0":
