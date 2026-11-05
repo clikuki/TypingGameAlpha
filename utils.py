@@ -1,6 +1,7 @@
 import os
 import sys
 import termios
+import time
 
 def asciify(txt):
     chars_to_ascii = {
@@ -304,6 +305,28 @@ def asciify(txt):
             ascii_rows[i] += row
 
     return ascii_rows
+
+def row_update_print(row_strings, transformations, replace, skip):
+    for t in transformations:
+        idx = t[0]
+        new_row = t[1]
+
+        if len(t) > 2:
+            sleep_dur = t[2]
+        else:
+            sleep_dur = 0.01
+        
+        clear_screen()
+        print("\n".join(row_strings))
+        if replace:
+            row_strings[idx] = new_row
+        else:
+            row_strings.insert(idx, new_row)
+
+        if not skip: time.sleep(sleep_dur)
+    
+    clear_screen()
+    print("\n".join(row_strings))
 
 def stringify_float_with_zeros(f, n):
     f = str(round(f, n)).split(".")

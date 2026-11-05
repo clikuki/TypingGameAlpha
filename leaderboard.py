@@ -1,6 +1,6 @@
 import os
 import time
-from utils import stringify_float_with_zeros, clear_screen, flush_terminal
+from utils import row_update_print, stringify_float_with_zeros, clear_screen, flush_terminal
 
 def _load_leaderboard_data():
     leaderboard_path = "leaderboard.dat"
@@ -8,14 +8,21 @@ def _load_leaderboard_data():
         return []
 
     data = []
+    entry = []
+    cnt = 0
     with open(leaderboard_path, "r") as fh:
         for line in fh:
-            line = line.strip().split(",")
-            data.append({
-                "name": line[0],
-                "time": line[1],
-                "score": line[2],
-            })
+            entry.append(line.strip())
+            cnt += 1
+            if cnt >= 3:
+                data.append({
+                    "name": entry[0],
+                    "time": entry[1],
+                    "score": entry[2],
+                })
+
+                cnt = 0
+                entry.clear()
 
     return data
 
@@ -32,33 +39,11 @@ def _save_leaderboard_data(data):
             g_score = entry["score"]
 
             fh.write(g_name)
-            fh.write(",")
+            fh.write("\n")
             fh.write(g_time)
-            fh.write(",")
+            fh.write("\n")
             fh.write(g_score)
             fh.write("\n")
-
-def _row_update_print(row_strings, transformations, replace):
-    for t in transformations:
-        idx = t[0]
-        new_row = t[1]
-
-        if len(t) > 2:
-            sleep_dur = t[2]
-        else:
-            sleep_dur = 0.01
-        
-        clear_screen()
-        print("\n".join(row_strings))
-        if replace:
-            row_strings[idx] = new_row
-        else:
-            row_strings.insert(idx, new_row)
-
-        time.sleep(sleep_dur)
-    
-    clear_screen()
-    print("\n".join(row_strings))
 
 def _print_leader_board(data):
     strings = [
@@ -79,7 +64,7 @@ def _print_leader_board(data):
     for i in range(row_cnt):
         new_rows.append((i+4, new_rows[2][1]))
 
-    _row_update_print(strings, new_rows, False)
+    row_update_print(strings, new_rows, False, False)
     time.sleep(0.3)
 
     # second draw: line-by-line entries
@@ -117,7 +102,7 @@ def _print_leader_board(data):
             (5, "║    Play a couple games to fill this out!    ║", 0),
         ])
 
-    _row_update_print(strings, new_rows, True)
+    row_update_print(strings, new_rows, True, False)
 
 def _get_name():
     err = ""
@@ -168,6 +153,9 @@ def try_add_new_entry(score, time):
             })
 
     _save_leaderboard_data(data)
+
+def clear():
+    _save_leaderboard_data([])
 
 def view():
     clear_screen()

@@ -6,15 +6,18 @@ import startup
 import game
 import leaderboard
 import words
+import options
 
 def _print_menu(do_slow):
     win_x,_ = os.get_terminal_size()
     win_x = min(win_x, 90)
-    print("[1] " + "  Start Game  ".center(win_x, "-"))
+    print("[1] " + "  Start Game  ".center(win_x, "─"))
     if do_slow: time.sleep(0.02)
-    print("[2] " + "  View Leaderboard  ".center(win_x, "-"))
+    print("[2] " + "  View Leaderboard  ".center(win_x, "─"))
     if do_slow: time.sleep(0.02)
-    print("[0] " + "  Exit  ".center(win_x, "-"))
+    print("[3] " + "  Options  ".center(win_x, "─"))
+    if do_slow: time.sleep(0.02)
+    print("[0] " + "  Exit  ".center(win_x, "─"))
     if do_slow: time.sleep(0.02)
 
 def _open_menu():
@@ -37,16 +40,16 @@ def _open_menu():
 
         if choice == "0":
             return
-        if choice == "1":
+        elif choice == "1":
             if game.start(word_set):
                 leaderboard.view()
-            continue
-        if choice == "2":
+        elif choice == "2":
             leaderboard.view()
-            continue
-
-        # Invalid option, redraw screen
-        last_input = choice
+        elif choice == "3":
+            options.view()
+        else:
+            # Invalid option, redraw screen
+            last_input = choice
 
 def main():
     args = sys.argv[1:]
