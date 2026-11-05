@@ -2,7 +2,6 @@ import os
 import time
 from utils import stringify_float_with_zeros, clear_screen, flush_terminal
 
-
 def _load_leaderboard_data():
     leaderboard_path = "leaderboard.dat"
     if not os.path.exists(leaderboard_path):
@@ -68,8 +67,10 @@ def _print_leader_board(data):
 
     # first draw: empty box expanding downwards
     new_rows = [
+        # Top and bottom
         (1, "╓─────────────────────────────────────────────╖"),
         (2, "╙─────────────────────────────────────────────╜"),
+        # Push bottom down with middle rows
         (2, "║                                             ║"),
         (3, "╟─────────────────────────────────────────────╢"),
     ]
@@ -82,6 +83,7 @@ def _print_leader_board(data):
     time.sleep(0.3)
 
     # second draw: line-by-line entries
+    # same index on header to overwrite row
     new_rows = [
         (2, "║ RANK                                        ║", 0.05),
         (2, "║ RANK    NAME                                ║", 0.05),
@@ -96,6 +98,7 @@ def _print_leader_board(data):
 
             g_time = stringify_float_with_zeros(float(entry["time"]), 2).rjust(6)
             
+            # Same idea above, but with entry data
             row = ("[" + str(i+1) + "]").rjust(4) + " "
             new_rows.append((i+4, "║ " + row.ljust(43) + " ║", 0.03))
 
@@ -108,9 +111,10 @@ def _print_leader_board(data):
             row += str(g_score).rjust(3) + " "
             new_rows.append((i+4, "║ " + row + " ║", 0.03))
     else:
+        # Show empty msg all at once if no past games
         new_rows.extend([
-            (4, "║             No past games found.            ║"),
-            (5, "║    Play a couple games to fill this out!    ║"),
+            (4, "║             No past games found.            ║", 0.1),
+            (5, "║    Play a couple games to fill this out!    ║", 0),
         ])
 
     _row_update_print(strings, new_rows, True)
@@ -127,11 +131,8 @@ def _get_name():
         name = input("\nEnter your initials: ")
         n_len = len(name)
 
-        if n_len < 1:
-            err = "Name must be at least 1 character long."
-            continue
-        if n_len > 8:
-            err = "Name must be at most 8 characters long."
+        if n_len < 1 or n_len > 8:
+            err = "Name must be from 1 to 8 characters long."
             continue
 
         clear_screen()

@@ -10,14 +10,6 @@ def _get_score(word):
     if length == 5: return 7
     return 0
 
-def _print_from_ascii_rows(pretext, word):
-    ascii_rows = asciify(word)
-
-    print(pretext + ascii_rows[0])
-    pretext_len = len(pretext)
-    for row in ascii_rows[1:]:
-        print(" " * pretext_len + row)
-
 def _run_game(word_set):
     word_list = get_random_words(word_set)
     start_time = time.time()
@@ -26,7 +18,9 @@ def _run_game(word_set):
 
     for word in word_list:
         clear_screen()
-        _print_from_ascii_rows("Your word is ", word)
+        print("Your word is ")
+        print("\n".join(asciify(word)))
+        
         typed_word = input("Typing: ").upper()
 
         if typed_word == word:
