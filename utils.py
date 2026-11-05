@@ -306,15 +306,11 @@ def asciify(txt):
 
     return ascii_rows
 
-def row_update_print(row_strings, transformations, replace, skip):
+def row_update_print(row_strings, transformations, replace, do_fast):
     for t in transformations:
-        idx = t[0]
-        new_row = t[1]
-
-        if len(t) > 2:
-            sleep_dur = t[2]
-        else:
-            sleep_dur = 0.01
+        if len(t) < 3:
+            t = t + (0.01,)
+        idx, new_row, sleep_dur = t
         
         clear_screen()
         print("\n".join(row_strings))
@@ -323,7 +319,7 @@ def row_update_print(row_strings, transformations, replace, skip):
         else:
             row_strings.insert(idx, new_row)
 
-        if not skip: time.sleep(sleep_dur)
+        if not do_fast: time.sleep(sleep_dur)
     
     clear_screen()
     print("\n".join(row_strings))
