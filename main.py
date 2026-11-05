@@ -29,7 +29,7 @@ def _open_menu(options_data):
         flush_terminal()
         clear_screen()
         startup.print_fast()
-        _print_menu(last_input == None)
+        _print_menu("noAnim" not in options_data and last_input == None)
         
         if last_input != None:
             print("\nInvalid option \"" + str(last_input) + "\".")
@@ -42,10 +42,10 @@ def _open_menu(options_data):
         if choice == "0":
             return
         elif choice == "1":
-            if game.start(word_set):
-                leaderboard.view()
+            if game.start(word_set, options_data):
+                leaderboard.view(options_data)
         elif choice == "2":
-            leaderboard.view()
+            leaderboard.view(options_data)
         elif choice == "3":
             options.view_and_edit(options_data)
         else:

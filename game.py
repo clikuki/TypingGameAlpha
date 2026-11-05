@@ -34,7 +34,17 @@ def _run_game(word_set):
 
     return (score, duration, incorrects)
 
-def _print_count_up(goal, pretext, posttext, round_by):
+def _stringify_possible_float(val):
+    if type(val) is float:
+        return stringify_float_with_zeros(val, 2)
+    else:
+        return str(val)
+
+def _print_count_up(goal, pretext, posttext, round_by, no_anim):
+    if no_anim:
+        print(pretext + _stringify_possible_float(goal) + posttext)
+        return
+
     for t in range(101):
         t /= 100
         i = (1-t) ** 0.5 - 1 # ease-in
@@ -51,27 +61,30 @@ def _print_count_up(goal, pretext, posttext, round_by):
     time.sleep(0.4)
     print("")
 
-def _display_results(score, duration, incorrects):
-    _print_count_up(score   , "You got a score of ", " points.", None)
-    _print_count_up(duration, "You took "          , " s."     , 2   )
+def _display_results(score, duration, incorrects, no_anim):
+    _print_count_up(score   , "You got a score of ", " points.", None, no_anim)
+    _print_count_up(duration, "You took "          , " s."     , 2   , no_anim)
 
     mistakes = len(incorrects)
     if mistakes == 0:
         print("You made no mistakes.")
     else:
-        _print_count_up(mistakes, "You made ", " mistakes.", None)
+        _print_count_up(mistakes, "You made ", " mistakes.", None, no_anim)
 
         print("\n" + "═" * 24)
         print("ACTUAL".center(12) + "RECIEVED".center(12))
         print("─" * 24)
         for word, typed_word in incorrects:
-            time.sleep(0.01)
+            if not no_anim: time.sleep(0.01)
             print(word.center(10), "->", (typed_word or "<EMPTY>").center(10))
         print("═" * 24)
 
-    time.sleep(0.6)
+    if not no_anim: time.sleep(0.6)
 
-def start(word_set):
+def start(word_set, options_data):
+    no_anim = "noAnim" in options_data
+    do_count_down = "noCountDown" not in options_data
+
     clear_screen()
     print(
         "\nInstructions:"
@@ -84,17 +97,18 @@ def start(word_set):
     if choice.upper() == "N":
         return False
 
-    third = 1/3
-    for i in range(3):
-        for j in range(1, 4):
-            clear_screen()
-            print("Starting in", 3-i, ("."*j).ljust(3), " ")
-            time.sleep(third)
-
-    flush_terminal()
+    if do_count_down:
+        clear_screen()
+        for i in range(3):
+            for j in range(1, 4):
+                if no_anim: j = 3
+                print("\rStarting in", 3-i, ("."*j).ljust(3), " ", end="", flush=True)
+                time.sleep(1/3)
+        print("")
+        flush_terminal()
 
     score, duration, incorrects = _run_game(word_set)
-    _display_results(score, duration, incorrects)
+    _display_results(score, duration, incorrects, no_anim)
 
     flush_terminal()
     input("\nPress ENTER to continue to leaderboard.") # block until user enters

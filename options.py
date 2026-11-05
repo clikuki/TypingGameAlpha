@@ -30,7 +30,9 @@ def draw_options(options_data, do_fast):
 
     option_rows = [
         "[1]  Clear leaderboard",
-        "[2]  Always skip logo animation -> "+ str("skipLogo" in options_data).upper(),
+        "[2]  Skip logo animation -> "+ str("skipLogo" in options_data).upper(),
+        "[3]  Skip game countdown -> "+ str("noCountDown" in options_data).upper(),
+        "[4]  Remove menu animations -> "+ str("noAnim" in options_data).upper(),
         "[0]  Return to main menu",
     ]
     option_rows = ["║  " + s.ljust(43) + "║" for s in option_rows]
@@ -60,7 +62,7 @@ def get_options():
     return _load_options_data()
 
 def view_and_edit(options_data):
-    has_ran = False
+    has_ran = "noAnim" in options_data
     res_text = None
     while True:
         flush_terminal()
@@ -86,6 +88,10 @@ def view_and_edit(options_data):
                 res_text = "Clear operation cancelled."
         elif choice == "2":
             toggle_elem_in_set(options_data, "skipLogo")
+        elif choice == "3":
+            toggle_elem_in_set(options_data, "noCountDown")
+        elif choice == "4":
+            toggle_elem_in_set(options_data, "noAnim")
         else:
             # Invalid option, redraw screen
             res_text = "\nInvalid option \"" + str(choice) + "\"."

@@ -45,7 +45,7 @@ def _save_leaderboard_data(data):
             fh.write(g_score)
             fh.write("\n")
 
-def _print_leader_board(data):
+def _print_leader_board(data, no_anim):
     strings = [
         " " + " LEADERBOARD ".center(45, "─") + " ",
     ]
@@ -64,8 +64,8 @@ def _print_leader_board(data):
     for i in range(row_cnt):
         new_rows.append((i+4, new_rows[2][1]))
 
-    row_update_print(strings, new_rows, False, False)
-    time.sleep(0.3)
+    row_update_print(strings, new_rows, False, no_anim)
+    if not no_anim: time.sleep(0.3)
 
     # second draw: line-by-line entries
     # same index on header to overwrite row
@@ -102,7 +102,7 @@ def _print_leader_board(data):
             (5, "║    Play a couple games to fill this out!    ║", 0),
         ])
 
-    row_update_print(strings, new_rows, True, False)
+    row_update_print(strings, new_rows, True, no_anim)
 
 def _get_name():
     err = ""
@@ -157,13 +157,16 @@ def try_add_new_entry(score, time):
 def clear():
     _save_leaderboard_data([])
 
-def view():
+def view(options_data):
+    no_anim = "noAnim" in options_data
+
     clear_screen()
 
     data = _load_leaderboard_data()
-    _print_leader_board(data)
+    _print_leader_board(data, no_anim)
 
-    time.sleep(0.2)
-
-    flush_terminal()
+    if not no_anim:
+        time.sleep(0.2)
+        flush_terminal()
+        
     input("\nPress ENTER to continue.")
