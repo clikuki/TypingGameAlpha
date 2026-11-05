@@ -5233,7 +5233,6 @@ fubar
 fubby
 fubsy
 fuchs
-fucks
 fucus
 fuder
 fudge
@@ -12368,8 +12367,6 @@ shish
 shisn
 shist
 shita
-shite
-shits
 shiva
 shive
 shivs

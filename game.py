@@ -18,7 +18,7 @@ def _run_game(word_set):
 
     for word in word_list:
         clear_screen()
-        print("Your word is ")
+        print("Your word is \n")
         print("\n".join(asciify(word)))
         
         typed_word = input("Typing: ").upper()

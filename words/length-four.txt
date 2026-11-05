@@ -1009,7 +1009,6 @@ crab
 crag
 cram
 cran
-crap
 craw
 crax
 cray
@@ -1100,7 +1099,6 @@ dalt
 daly
 dama
 dame
-damn
 damp
 dams
 dana
@@ -1541,7 +1539,6 @@ fads
 fady
 faff
 fage
-fags
 fail
 fain
 fair
@@ -1735,7 +1732,6 @@ frot
 frow
 frye
 fuci
-fuck
 fuel
 fuff
 fugs
@@ -2148,7 +2144,6 @@ heil
 heir
 held
 hele
-hell
 helm
 help
 heme
@@ -4518,7 +4513,6 @@ shik
 shim
 shin
 ship
-shit
 shiv
 shlu
 shoa
@@ -4666,7 +4660,6 @@ smsa
 smtp
 smug
 smur
-smut
 snab
 snag
 snap
